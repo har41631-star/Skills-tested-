@@ -1,0 +1,44 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; color: #fff; }
+    #root * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .k-g { position:absolute; left:0; right:0; bottom:72px; height:100px; display:flex; align-items:center; justify-content:center; gap:0 16px; flex-wrap:wrap; text-align:center; padding:0 200px;
+      font-family:"Archivo Black"; font-size:54px; line-height:1.05; color:#fff; opacity:0; overflow:visible;
+      -webkit-text-stroke: 8px #000; paint-order: stroke fill; text-shadow: 0 5px 0 #000; }
+    .k-w { display:inline-block; }
+    .k-hi { color:#FFE01B; }
+  
+  </style>
+  <div id="root" data-composition-id="captions" data-width="1920" data-height="1080">
+    <div class="k-g" id="k-g0"><span class="k-w">Got</span> <span class="k-w">a</span> <span class="k-w k-hi">long</span> <span class="k-w">video?</span></div>
+    <div class="k-g" id="k-g1"><span class="k-w">Turn</span> <span class="k-w">it</span> <span class="k-w">into</span> <span class="k-w k-hi">shorts.</span></div>
+    <div class="k-g" id="k-g2"><span class="k-w">Cutting</span> <span class="k-w">clips</span> <span class="k-w">by</span> <span class="k-w k-hi">hand?</span></div>
+    <div class="k-g" id="k-g3"><span class="k-w k-hi">10+</span> <span class="k-w k-hi">minutes.</span></div>
+    <div class="k-g" id="k-g4"><span class="k-w">Every.</span> <span class="k-w k-hi">Single.</span> <span class="k-w">One.</span></div>
+    <div class="k-g" id="k-g5"><span class="k-w">Paste</span> <span class="k-w">a</span> <span class="k-w k-hi">YouTube</span> <span class="k-w">link</span></div>
+    <div class="k-g" id="k-g6"><span class="k-w">or</span> <span class="k-w k-hi">upload</span> <span class="k-w">any</span> <span class="k-w">video</span></div>
+    <div class="k-g" id="k-g7"><span class="k-w k-hi">ClipFive</span> <span class="k-w">scans</span> <span class="k-w">your</span> <span class="k-w">video</span></div>
+    <div class="k-g" id="k-g8"><span class="k-w">picks</span> <span class="k-w">the</span> <span class="k-w k-hi">best</span> <span class="k-w k-hi">moments</span></div>
+    <div class="k-g" id="k-g9"><span class="k-w k-hi">5–10</span> <span class="k-w">clips</span> <span class="k-w">per</span> <span class="k-w">video</span></div>
+    <div class="k-g" id="k-g10"><span class="k-w">for</span> <span class="k-w k-hi">TikTok,</span> <span class="k-w k-hi">Reels</span> <span class="k-w">&</span> <span class="k-w k-hi">Shorts</span></div>
+    <div class="k-g" id="k-g11"><span class="k-w k-hi">Free</span> <span class="k-w">to</span> <span class="k-w">start.</span></div>
+    <div class="k-g" id="k-g12"><span class="k-w k-hi">No</span> <span class="k-w">credit</span> <span class="k-w">card.</span></div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+
+      const G = [[0.15,1.2,4],[1.2,2.35,4],[2.5,3.95,4],[3.95,4.75,2],[4.75,5.5,3],[5.7,7.5,4],[7.5,9.3,4],[9.55,11.3,4],[11.3,13.1,4],[13.35,15.4,4],[15.4,17.5,5],[17.75,20,3],[20,22.4,3]];
+      G.forEach(([s, e, n], i) => {
+        const g = "#k-g" + i;
+        tl.set(g, { opacity: 1, visibility: "visible" }, s);
+        tl.fromTo(g + " .k-w", { opacity: 0, scale: 0.8, y: 8 }, { opacity: 1, scale: 1, y: 0, duration: 0.14, ease: "power3.out", stagger: Math.min(0.09, (e - s - 0.3) / n) }, s);
+        tl.to(g, { opacity: 0, duration: 0.1, ease: "power2.in" }, e - 0.1);
+        tl.set(g, { opacity: 0, visibility: "hidden" }, e);
+      });
+  
+      window.__timelines["captions"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,57 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; color: #fff; }
+    #root * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    #p-bg { position:absolute; inset:0; background:#0d0d0d; }
+    .p-hl { position:absolute; left:0; right:0; top:95px; text-align:center; font-size:104px; font-family:"Archivo Black"; line-height:1.02; text-transform:uppercase; letter-spacing:-0.02em; }
+    .p-hl span { display:inline-block; }
+    #p-ed { position:absolute; left:360px; top:270px; width:1200px; height:580px; border-radius:20px; background:#1b1b1b; border:2px solid #2c2c2c; overflow:hidden; }
+    #p-prev { position:absolute; left:24px; top:24px; width:180px; height:320px; border-radius:10px; background:linear-gradient(160deg,#4a4a4a,#222); }
+    .p-slider { position:absolute; height:10px; border-radius:5px; background:#333; }
+    .p-knob { position:absolute; top:-7px; width:24px; height:24px; border-radius:50%; background:#777; }
+    #p-tc { position:absolute; right:28px; top:24px; font-family:"JetBrains Mono"; font-weight:700; font-size:44px; color:#bbb; }
+    .p-blk { position:absolute; height:38px; border-radius:6px; }
+    #p-ph { position:absolute; left:0; top:334px; width:4px; height:210px; background:#fff; border-radius:2px; }
+    #p-scrim { position:absolute; left:360px; top:270px; width:1200px; height:580px; border-radius:20px; background:rgba(0,0,0,.72); opacity:0; }
+    #p-big { position:absolute; left:360px; top:270px; width:1200px; height:580px; display:flex; align-items:center; justify-content:center; font-family:"Archivo Black"; font-size:250px; color:#FFE01B; letter-spacing:-0.03em; white-space:nowrap; opacity:0; }
+    #p-dip { position:absolute; inset:0; background:#000; opacity:0; }
+  
+  </style>
+  <div id="root" data-composition-id="problem" data-width="1920" data-height="1080">
+
+    <div id="p-bg"></div>
+    <div class="p-hl" id="p-hl"><span>Editing</span> <span>one</span> <span>short?</span></div>
+    <div id="p-ed">
+      <div id="p-prev"></div>
+      <div class="p-slider" style="left:244px; top:110px; width:916px;"><div class="p-knob" id="p-k0" style="left:315px;"></div></div><div class="p-slider" style="left:244px; top:166px; width:916px;"><div class="p-knob" id="p-k1" style="left:76px;"></div></div><div class="p-slider" style="left:244px; top:222px; width:916px;"><div class="p-knob" id="p-k2" style="left:598px;"></div></div><div class="p-slider" style="left:244px; top:278px; width:916px;"><div class="p-knob" id="p-k3" style="left:792px;"></div></div>
+      <div id="p-tc">00:00</div>
+      <div class="p-blk" style="left:24px; top:350px; width:75px; background:#3a3a3a;"></div><div class="p-blk" style="left:123px; top:350px; width:228px; background:#3a3a3a;"></div><div class="p-blk" style="left:366px; top:350px; width:157px; background:#3a3a3a;"></div><div class="p-blk" style="left:538px; top:350px; width:118px; background:#3a3a3a;"></div><div class="p-blk" style="left:671px; top:350px; width:235px; background:#3a3a3a;"></div><div class="p-blk" style="left:917px; top:350px; width:97px; background:#3a3a3a;"></div><div class="p-blk" style="left:1034px; top:350px; width:142px; background:#3a3a3a;"></div><div class="p-blk" style="left:35px; top:400px; width:130px; background:#474747;"></div><div class="p-blk" style="left:181px; top:400px; width:131px; background:#474747;"></div><div class="p-blk" style="left:336px; top:400px; width:119px; background:#474747;"></div><div class="p-blk" style="left:477px; top:400px; width:106px; background:#474747;"></div><div class="p-blk" style="left:591px; top:400px; width:97px; background:#474747;"></div><div class="p-blk" style="left:700px; top:400px; width:191px; background:#474747;"></div><div class="p-blk" style="left:911px; top:400px; width:78px; background:#474747;"></div><div class="p-blk" style="left:1011px; top:400px; width:165px; background:#474747;"></div><div class="p-blk" style="left:44px; top:450px; width:292px; background:#3d4a5c;"></div><div class="p-blk" style="left:353px; top:450px; width:281px; background:#3d4a5c;"></div><div class="p-blk" style="left:655px; top:450px; width:70px; background:#3d4a5c;"></div><div class="p-blk" style="left:734px; top:450px; width:146px; background:#3d4a5c;"></div><div class="p-blk" style="left:894px; top:450px; width:65px; background:#3d4a5c;"></div><div class="p-blk" style="left:966px; top:450px; width:210px; background:#3d4a5c;"></div><div class="p-blk" style="left:37px; top:500px; width:172px; background:#4d3f3f;"></div><div class="p-blk" style="left:232px; top:500px; width:229px; background:#4d3f3f;"></div><div class="p-blk" style="left:479px; top:500px; width:139px; background:#4d3f3f;"></div><div class="p-blk" style="left:631px; top:500px; width:93px; background:#4d3f3f;"></div><div class="p-blk" style="left:733px; top:500px; width:279px; background:#4d3f3f;"></div><div class="p-blk" style="left:1024px; top:500px; width:106px; background:#4d3f3f;"></div>
+      <div id="p-ph"></div>
+    </div>
+    <div id="p-scrim"></div>
+    <div id="p-big">10+ MIN</div>
+    <div id="p-dip"></div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+
+      tl.fromTo("#p-hl span", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out", stagger: 0.09 }, 0.08);
+      tl.fromTo("#p-ed", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 0.05);
+      const ph = [161,651,366,913,503,1050,708];
+      tl.set("#p-ph", { x: ph[0] }, 0);
+      ph.slice(1).forEach((x, i) => tl.to("#p-ph", { x, duration: 0.22, ease: "power2.inOut" }, 0.35 + i * 0.24));
+      [0,1,2,3].forEach(i => tl.to("#p-k"+i, { x: (i % 2 ? -1 : 1) * 120, duration: 0.5, ease: "power2.inOut" }, 0.4 + i * 0.3));
+      const tc = { v: 0 };
+      const fmt = v => { const m = Math.floor(v / 60), s = Math.floor(v % 60); return String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0"); };
+      tl.fromTo(tc, { v: 0 }, { v: 600, duration: 1.5, ease: "power2.in", onUpdate: () => { document.getElementById("p-tc").textContent = fmt(tc.v) + (tc.v >= 600 ? "+" : ""); } }, 0.3);
+      tl.to("#p-tc", { color: "#FFE01B", duration: 0.1 }, 1.75);
+      tl.to("#p-scrim", { opacity: 1, duration: 0.18, ease: "power2.out" }, 1.85);
+      tl.fromTo("#p-big", { opacity: 0, scale: 1.35, filter: "blur(10px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, 1.88);
+      tl.to("#p-dip", { opacity: 0.45, duration: 0.1, ease: "none" }, 3.08);
+  
+      window.__timelines["problem"] = tl;
+    })();
+  </script>
+</template>

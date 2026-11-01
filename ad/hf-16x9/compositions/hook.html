@@ -1,0 +1,60 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; color: #fff; }
+    #root * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .h-hl { position:absolute; left:140px; top:360px; text-align:left; font-size:128px; font-family:"Archivo Black"; line-height:1.0; letter-spacing:-0.02em; text-transform:uppercase; }
+    .h-hl span { display:inline-block; }
+    .y { color:#FFE01B; }
+    .h-slice { position:absolute; left:1225px; top:355.5px; width:230px; height:409px; overflow:hidden;
+      background: radial-gradient(circle at 18% 40%, #ff5fa2 0, rgba(255,95,162,0) 22%), radial-gradient(circle at 50% 55%, #ff3b2f 0, rgba(255,59,47,0) 26%), radial-gradient(circle at 82% 38%, #2bc0c0 0, rgba(43,192,192,0) 24%), linear-gradient(90deg, #8a1450, #6a1010 50%, #0b5a62);
+      background-size: 300% 100%; }
+    #h-s0 { background-position: 0% 50%; border-radius: 22px 0 0 22px; }
+    #h-s1 { background-position: 50% 50%; }
+    #h-s2 { background-position: 100% 50%; border-radius: 0 22px 22px 0; }
+    .h-tint { position:absolute; inset:0; opacity:0; }
+    #h-s0 .h-tint { background: radial-gradient(circle at 40% 35%, #ff7ab6 0, #b0145a 40%, #2a0414 85%); }
+    #h-s1 .h-tint { background: radial-gradient(circle at 50% 40%, #ff3a2a 0, #a30d0d 40%, #200303 85%); }
+    #h-s2 .h-tint { background: radial-gradient(circle at 45% 35%, #39d0cc 0, #0f5560 45%, #021012 88%); }
+    .h-cap { position:absolute; left:0; right:0; bottom:60px; text-align:center; font-family:"Archivo Black"; font-size:28px; opacity:0; text-shadow:0 2px 6px rgba(0,0,0,.6); }
+    #h-frame { position:absolute; left:995px; top:366px; width:690px; height:388px; border:3px solid rgba(255,255,255,.75); border-radius:22px; }
+    #h-play { position:absolute; left:1280px; top:500px; width:120px; height:120px; border-radius:50%; background:rgba(0,0,0,.45); border:3px solid rgba(255,255,255,.85); }
+    #h-play::after { content:""; position:absolute; left:46px; top:34px; border-left:40px solid #fff; border-top:26px solid transparent; border-bottom:26px solid transparent; }
+    #h-bar { position:absolute; left:1023px; top:720px; width:634px; height:8px; border-radius:4px; background:rgba(255,255,255,.3); overflow:hidden; }
+    #h-barfill { position:absolute; inset:0; background:#fff; transform-origin: 0 50%; }
+  
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1920" data-height="1080">
+
+    <div id="h-hl1" class="h-hl"><span>One</span><br><span>video</span></div>
+    <div id="h-hl2" class="h-hl"><span>5–10</span><br><span class="y">shorts</span></div>
+    <div id="h-group">
+      <div id="h-s0" class="h-slice"><div class="h-tint"></div><div class="h-cap">The <span class="y">best</span> part</div></div>
+      <div id="h-s1" class="h-slice"><div class="h-tint"></div><div class="h-cap">Wait <span class="y">for</span> it</div></div>
+      <div id="h-s2" class="h-slice"><div class="h-tint"></div><div class="h-cap">Here's <span class="y">the</span> trick</div></div>
+      <div id="h-frame"></div>
+      <div id="h-play"></div>
+      <div id="h-bar"><div id="h-barfill"></div></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+
+      gsap.set("#h-hl2 span", { opacity: 0, filter: "blur(8px)" });
+      [0,1,2].forEach(i => gsap.set("#h-s"+i, { scaleY: 0.95, x: (i - 1) * 230, rotation: 0 }));
+      tl.fromTo("#h-barfill", { scaleX: 0.04 }, { scaleX: 0.3, duration: 0.7, ease: "none" }, 0);
+      tl.to(["#h-play", "#h-bar", "#h-frame"], { opacity: 0, scale: 0.9, duration: 0.14, ease: "power2.in" }, 0.6);
+      tl.to("#h-s0", { x: -278, scaleY: 1, scale: 1.04, rotation: -5, borderRadius: 22, duration: 0.5, ease: "expo.out" }, 0.7);
+      tl.to("#h-s1", { y: -18, scaleY: 1, scale: 1.08, borderRadius: 22, duration: 0.5, ease: "expo.out" }, 0.7);
+      tl.to("#h-s2", { x: 278, scaleY: 1, scale: 1.04, rotation: 5, borderRadius: 22, duration: 0.5, ease: "expo.out" }, 0.7);
+      tl.to(".h-tint", { opacity: 1, duration: 0.3, ease: "power2.out", stagger: 0.05 }, 0.72);
+      tl.to(".h-cap", { opacity: 1, duration: 0.15, stagger: 0.08 }, 1.05);
+      tl.to("#h-hl1 span", { opacity: 0, filter: "blur(8px)", duration: 0.14, ease: "power2.in", stagger: 0.04 }, 0.68);
+      tl.to("#h-hl2 span", { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out", stagger: 0.08 }, 0.86);
+      tl.to(["#h-hl2", "#h-group"], { x: -520, opacity: 0, filter: "blur(14px)", duration: 0.24, ease: "power3.in" }, 2.14);
+  
+      window.__timelines["hook"] = tl;
+    })();
+  </script>
+</template>

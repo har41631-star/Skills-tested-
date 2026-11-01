@@ -1,0 +1,75 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; color: #fff; }
+    #root * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    #s-bg { position:absolute; inset:0; background:#0a0a0a; }
+    .s-hl { position:absolute; left:0; right:0; top:230px; height:220px; font-size:96px; display:flex; align-items:center; justify-content:center; text-align:center; font-family:"Archivo Black"; line-height:1.02; text-transform:uppercase; letter-spacing:-0.02em; }
+    .s-hl span { display:inline-block; }
+    .y { color:#FFE01B; }
+    .s-card { position:absolute; top:470px; width:300px; height:533px; border-radius:24px; overflow:hidden; border:2px solid #333; background:#000; }
+    .s-foot { position:absolute; left:-10%; top:-10%; width:120%; height:120%; }
+    .s-capt { position:absolute; left:0; right:0; bottom:90px; text-align:center; font-family:"Archivo Black"; font-size:34px; line-height:1.1; padding:0 14px; text-shadow:0 3px 8px rgba(0,0,0,.7); }
+    .s-w { display:inline-block; opacity:0; }
+    .s-dl { position:absolute; right:16px; top:16px; width:60px; height:60px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; opacity:0; }
+    .s-badge { position:absolute; top:1029px; width:92px; height:92px; border-radius:50%; background:#FFE01B; color:#111; display:flex; align-items:center; justify-content:center; font-family:"Archivo Black"; font-size:38px; box-shadow:0 0 30px rgba(255,224,27,.45); }
+    #s-world { position:absolute; left:494px; top:1029px; width:92px; height:92px; border-radius:50%; background:#FFE01B; opacity:0; }
+  
+  </style>
+  <div id="root" data-composition-id="shorts" data-width="1080" data-height="1920">
+
+    <div id="s-bg"></div>
+    <div class="s-hl" id="s-h1"><div><span>Captions.</span></div></div>
+    <div class="s-hl" id="s-h2"><div><span>Virality</span><br><span class="y">scores.</span></div></div>
+    <div class="s-hl" id="s-h3"><div><span>Ready</span> <span>to</span><br><span class="y">download.</span></div></div>
+    <div class="s-card" id="s-c0" style="left:60px;">
+        <div class="s-foot" style="background:radial-gradient(circle at 30% 28%, #ff7ab6 0, rgba(255,122,182,0) 30%), radial-gradient(circle at 70% 62%, #ffb347 0, rgba(255,179,71,0) 30%), linear-gradient(165deg,#9a1450,#3a0a1f 70%,#120408);"></div>
+        <div class="s-capt"><span class="s-w">Here's</span> <span class="s-w s-hi">the</span> <span class="s-w">part</span></div>
+        <div class="s-dl" id="s-dl0"><svg viewBox="0 0 24 24" width="60%" height="60%"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="s-badge" id="s-b0" style="left:164px;"><span id="s-n0">0</span></div>
+      <div class="s-card" id="s-c1" style="left:390px;">
+        <div class="s-foot" style="background:radial-gradient(circle at 50% 42%, #ff3a2a 0, #a30d0d 38%, #250404 80%);"></div>
+        <div class="s-capt"><span class="s-w">Nobody</span> <span class="s-w s-hi">expected</span> <span class="s-w">this</span></div>
+        <div class="s-dl" id="s-dl1"><svg viewBox="0 0 24 24" width="60%" height="60%"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="s-badge" id="s-b1" style="left:494px;"><span id="s-n1">0</span></div>
+      <div class="s-card" id="s-c2" style="left:720px;">
+        <div class="s-foot" style="background:radial-gradient(circle at 38% 30%, #39d0cc 0, rgba(57,208,204,0) 45%), radial-gradient(circle at 76% 45%, #d8c060 0, rgba(216,192,96,0) 32%), linear-gradient(170deg,#0f5560,#06242a 70%,#020a0c);"></div>
+        <div class="s-capt"><span class="s-w">Watch</span> <span class="s-w">this</span> <span class="s-w s-hi">moment</span></div>
+        <div class="s-dl" id="s-dl2"><svg viewBox="0 0 24 24" width="60%" height="60%"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="s-badge" id="s-b2" style="left:824px;"><span id="s-n2">0</span></div>
+    <div id="s-world"></div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+
+      const S = [94,89,83];
+      gsap.set(["#s-h1 span", "#s-h2 span", "#s-h3 span"], { opacity: 0, filter: "blur(8px)" });
+      [0,1,2].forEach(i => tl.fromTo("#s-c"+i, { y: 864, opacity: 0, filter: "blur(12px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.55, ease: "expo.out" }, i * 0.07));
+      [0,1,2].forEach(i => tl.fromTo("#s-c"+i+" .s-foot", { x: 0, y: 0, scale: 1 }, { x: (i - 1) * 18, y: -14, scale: 1.08, duration: 4.4, ease: "none" }, 0));
+      gsap.set(".s-badge", { scale: 0, opacity: 0 });
+      tl.to("#s-h1 span", { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out" }, 0.2);
+      // karaoke captions: words appear one by one, then hold
+      [0,1,2].forEach(i => tl.to("#s-c"+i+" .s-w", { opacity: 1, duration: 0.08, stagger: 0.22 }, 0.45 + i * 0.1));
+      tl.to("#s-h1 span", { opacity: 0, filter: "blur(8px)", duration: 0.13, ease: "power2.in" }, 1.25);
+      tl.to("#s-h2 span", { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out", stagger: 0.08 }, 1.36);
+      [0,1,2].forEach(i => {
+        tl.to("#s-b"+i, { scale: 1, opacity: 1, duration: 0.35, ease: "expo.out" }, 1.4 + i * 0.12);
+        const o = { v: 0 };
+        tl.to(o, { v: S[i], duration: 0.6, ease: "power2.out", onUpdate: () => { document.getElementById("s-n"+i).textContent = Math.round(o.v); } }, 1.4 + i * 0.12);
+      });
+      tl.to("#s-h2 span", { opacity: 0, filter: "blur(8px)", duration: 0.13, ease: "power2.in" }, 2.55);
+      tl.to("#s-h3 span", { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out", stagger: 0.08 }, 2.66);
+      [0,1,2].forEach(i => tl.fromTo("#s-dl"+i, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "expo.out" }, 2.75 + i * 0.1));
+      tl.to(["#s-h3", "#s-c0", "#s-c2", "#s-b0", "#s-b2"], { opacity: 0, filter: "blur(12px)", duration: 0.25, ease: "power2.in" }, 3.95);
+      tl.to("#s-n1", { opacity: 0, duration: 0.1 }, 3.95);
+      tl.set("#s-world", { opacity: 1 }, 4.0);
+      tl.fromTo("#s-world", { scale: 1 }, { scale: 53, duration: 0.38, ease: "power3.in" }, 4.0);
+  
+      window.__timelines["shorts"] = tl;
+    })();
+  </script>
+</template>
