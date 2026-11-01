@@ -32,21 +32,38 @@ const SCENES = [
 ];
 const TOTAL = 22.5;
 
-const CAPTIONS = [
-  { s: 0.15, e: 1.2, w: ["Got", "a", "long", "video?"], hi: 2 },
-  { s: 1.2, e: 2.35, w: ["Turn", "it", "into", "shorts."], hi: 3 },
-  { s: 2.5, e: 3.95, w: ["Cutting", "clips", "by", "hand?"], hi: 3 },
-  { s: 3.95, e: 4.75, w: ["10+", "minutes."], hi: [0, 1] },
-  { s: 4.75, e: 5.5, w: ["Every.", "Single.", "One."], hi: 1 },
-  { s: 5.7, e: 7.5, w: ["Paste", "a", "YouTube", "link"], hi: 2 },
-  { s: 7.5, e: 9.3, w: ["or", "upload", "any", "video"], hi: 1 },
-  { s: 9.55, e: 11.3, w: ["ClipFive", "scans", "your", "video"], hi: 0 },
-  { s: 11.3, e: 13.1, w: ["picks", "the", "best", "moments"], hi: [2, 3] },
-  { s: 13.35, e: 15.4, w: ["5–10", "clips", "per", "video"], hi: 0 },
-  { s: 15.4, e: 17.5, w: ["for", "TikTok,", "Reels", "&", "Shorts"], hi: [1, 2, 4] },
-  { s: 17.75, e: 20.0, w: ["Free", "to", "start."], hi: 0 },
-  { s: 20.0, e: 22.4, w: ["No", "credit", "card."], hi: 0 },
+// Voiceover (local Kokoro TTS, voice am_michael, speed 1.25), one file per line, placed at `at`.
+// Caption groups follow the spoken words; word times are spread across each line by length.
+const VO = [
+  { id: "l1", at: 0.15, dur: 2.04, groups: [["Got a long video?", "long"], ["Turn it into shorts!", "shorts!"]] },
+  { id: "l2", at: 2.55, dur: 2.45, groups: [["Editing one short by hand?", "hand?"], ["10 minutes. Or more.", "10 minutes."]] },
+  { id: "l3", at: 5.75, dur: 3.15, groups: [["With ClipFive,", "ClipFive,"], ["paste a YouTube link,", "YouTube"], ["or upload any video.", "upload"]] },
+  { id: "l4", at: 9.6, dur: 2.13, groups: [["AI scans it,", "AI"], ["and picks", "picks"], ["the best moments.", "best moments."]] },
+  { id: "l5", at: 13.4, dur: 3.72, groups: [["You get 5–10 vertical clips,", "5–10"], ["with captions", "captions"], ["and a virality score.", "virality score."]] },
+  { id: "l6", at: 17.8, dur: 3.57, groups: [["ClipFive.", "ClipFive."], ["Pro AI clips", "Pro"], ["for $5 a month.", "$5"], ["Free to start!", "Free"]] },
 ];
+const CAPTIONS = (() => {
+  const out = [];
+  for (const line of VO) {
+    const words = line.groups.flatMap(([t], gi) => t.split(" ").map((w) => ({ w, gi })));
+    // spoken length proxy: letters, plus a pause after punctuation; "5–10" and "$5" read longer
+    const weight = (w) => w.replace(/[^\w$–]/g, "").length + 1 + (/[.,?!]$/.test(w) ? 3 : 0) + (/–|\$/.test(w) ? 4 : 0);
+    const total = words.reduce((a, x) => a + weight(x.w), 0);
+    let acc = 0;
+    words.forEach((x) => { x.t = line.at + (acc / total) * line.dur; acc += weight(x.w); });
+    line.groups.forEach(([t, hiText], gi) => {
+      const ws = words.filter((x) => x.gi === gi);
+      const hiWords = new Set(hiText.split(" "));
+      out.push({ s: Math.max(0.12, ws[0].t - 0.06), w: ws.map((x) => x.w), hi: ws.map((x, j) => (hiWords.has(x.w) ? j : -1)).filter((j) => j >= 0) });
+    });
+  }
+  out.push({ s: 21.5, w: ["No", "credit", "card."], hi: [0] });
+  out.forEach((g, i) => { g.e = i + 1 < out.length ? out[i + 1].s : 22.4; });
+  // a group that is the last of its line holds until shortly after the line ends, not until the next line
+  let k = 0;
+  for (const line of VO) { k += line.groups.length; const g = out[k - 1]; g.e = Math.min(g.e, line.at + line.dur + 0.35); }
+  return out.map((g) => ({ ...g, s: Math.round(g.s * 100) / 100, e: Math.round(g.e * 100) / 100 }));
+})();
 
 // Deterministic PRNG (mulberry32) so the waveform and editor are identical every build.
 function rng(seed) {
@@ -560,7 +577,11 @@ function index(P, W, H, sfx) {
   const hosts = SCENES.map(
     (s, i) => `      <div id="${s.id}" data-composition-id="${s.id}" data-composition-src="compositions/${s.id}.html" data-start="${s.start}" data-duration="${s.dur}" data-track-index="${i + 1}" data-track-kind="graphics" data-width="${W}" data-height="${H}" style="z-index:${i + 1}"></div>`,
   ).join("\n");
-  const audio = sfx
+  const voice = VO.map(
+    (l) =>
+      `      <audio id="vo-${l.id}" class="clip" src="assets/vo/${l.id}.wav" data-start="${l.at}" data-duration="${l.dur}" data-track-index="15" data-volume="1"></audio>`,
+  ).join("\n");
+  const audio = voice + "\n" + sfx
     .map(
       (a, i) =>
         `      <audio id="sfx-${i}" class="clip" src="${a.src}" data-start="${a.t}" data-duration="${a.d}" data-track-index="${20 + (i % 4)}" data-volume="${a.v}"></audio>`,
@@ -597,19 +618,19 @@ ${audio}
 
 // Sound effects placed on visible actions (files resolved into ad/sfx/ beforehand, if present).
 const SFX = [
-  { name: "whoosh1", t: 0.7, d: 0.6, v: 0.7 },
-  { name: "whoosh2", t: 2.18, d: 0.6, v: 0.6 },
-  { name: "impact", t: 4.27, d: 1.0, v: 0.8 },
-  { name: "click", t: 6.4, d: 0.4, v: 0.9 },
-  { name: "type", t: 6.5, d: 0.75, v: 0.35 },
-  { name: "click", t: 8.56, d: 0.4, v: 0.9 },
-  { name: "whoosh1", t: 8.8, d: 0.6, v: 0.7 },
-  { name: "whoosh2", t: 12.95, d: 0.6, v: 0.6 },
-  { name: "pop", t: 14.6, d: 0.4, v: 0.7 },
-  { name: "pop", t: 14.72, d: 0.4, v: 0.6 },
-  { name: "pop", t: 14.84, d: 0.4, v: 0.7 },
-  { name: "whoosh1", t: 17.2, d: 0.6, v: 0.7 },
-  { name: "click", t: 20.3, d: 0.4, v: 0.9 },
+  { name: "whoosh1", t: 0.7, d: 0.6, v: 0.4 },
+  { name: "whoosh2", t: 2.18, d: 0.6, v: 0.4 },
+  { name: "impact", t: 4.27, d: 1.0, v: 0.55 },
+  { name: "click", t: 6.4, d: 0.4, v: 0.55 },
+  { name: "type", t: 6.5, d: 0.75, v: 0.15 },
+  { name: "click", t: 8.56, d: 0.4, v: 0.55 },
+  { name: "whoosh1", t: 8.8, d: 0.6, v: 0.4 },
+  { name: "whoosh2", t: 12.95, d: 0.6, v: 0.4 },
+  { name: "pop", t: 14.6, d: 0.4, v: 0.45 },
+  { name: "pop", t: 14.72, d: 0.4, v: 0.45 },
+  { name: "pop", t: 14.84, d: 0.4, v: 0.45 },
+  { name: "whoosh1", t: 17.2, d: 0.6, v: 0.4 },
+  { name: "click", t: 20.3, d: 0.4, v: 0.55 },
 ];
 
 for (const P of [true, false]) {
@@ -620,6 +641,8 @@ for (const P of [true, false]) {
   mkdirSync(join(dir, "compositions"), { recursive: true });
   mkdirSync(join(dir, "assets"), { recursive: true });
   cpSync(join(AD, "vendor", "gsap.min.js"), join(dir, "assets", "gsap.min.js"));
+  mkdirSync(join(dir, "assets", "vo"), { recursive: true });
+  for (const l of VO) cpSync(join(AD, "vo", `${l.id}.wav`), join(dir, "assets", "vo", `${l.id}.wav`));
   const sfx = [];
   for (const s of SFX) {
     const src = join(AD, "sfx", `${s.name}.mp3`);
